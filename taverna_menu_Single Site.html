@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>Κατάλογος Παραδοσιακής Ταβέρνας - V2</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        
+        @page {
+            size: A4;
+            margin: 10mm 8mm;
+            background-color: #faf4e8;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Times New Roman', Times, serif;
+            color: #2b251f;
+            background-color: #faf4e8;
+            -webkit-print-color-adjust: exact;
+        }
+
+        .page {
+            width: 100%;
+            height: auto;
+            position: relative;
+            page-break-after: always;
+            padding: 15mm 12mm;
+            border: 10px double #8a2518; /* Πιο έντονο περίγραμμα */
+            margin: 10px;
+        }
+        
+        .meander-border {
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: 4px;
+            bottom: 4px;
+            border: 3px solid #1a446c; /* Πιο έντονο μπλε */
+            pointer-events: none;
+        }
+
+        .parchment-texture {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            opacity: 0.06;
+            background-image: radial-gradient(#8a2518 1.5px, transparent 0), radial-gradient(#1a446c 1.5px, transparent 0);
+            background-size: 10px 10px;
+            background-position: 0 0, 5px 5px;
+            pointer-events: none;
+        }
+
+        /* Μεγαλύτερα γράμματα στην επικεφαλίδα */
+        .menu-header {
+            text-align: center;
+            margin-bottom: 15px;
+            border-bottom: 3px dashed #8a2518;
+            padding-bottom: 12px;
+        }
+        
+        .menu-header h1 {
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            font-size: 20pt; /* Αυξημένο μέγεθος */
+            color: #8a2518;
+            margin: 0 0 6px 0;
+            letter-spacing: 1px;
+        }
+        
+		.menu-header h2 {
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            font-size: 35pt; /* Αυξημένο μέγεθος */
+            color: #8a2518;
+            margin: 10 10 6px 0;
+            letter-spacing: 1px;
+        }
+		
+        .menu-header p {
+            font-size: 14pt; /* Αυξημένο μέγεθος */
+            margin: 0;
+            font-style: italic;
+            color: #1a446c;
+            font-weight: bold;
+            letter-spacing: 3px;
+        }
+
+        .menu-layout-table {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+        
+        .menu-column {
+            display: table-cell;
+            width: 50%;
+            vertical-align: top;
+            padding: 0 15px; /* Περισσότερος χώρος ανάμεσα στις στήλες */
+        }
+
+        .category-block {
+            margin-bottom: 20px;
+            page-break-inside: avoid;
+        }
+        
+        /* Μεγαλύτερα γράμματα στις κατηγορίες */
+        .category-title {
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            font-size: 16pt; /* Αυξημένο μέγεθος */
+            color: #1a446c;
+            border-bottom: 2px solid #8a2518;
+            padding-bottom: 5px;
+            margin: 15px 0 12px 0;
+            display: block;
+            font-weight: bold;
+        }
+        
+        .category-icon {
+            display: inline-block;
+            margin-right: 8px;
+            font-style: normal;
+            color: #8a2518;
+        }
+
+        /* Δυναμικές Κουκίδες (Dynamic Dots) με χρήση CSS Table-Cell */
+        .menu-item {
+            display: table;
+            width: 100%;
+            margin-bottom: 8px;
+            font-size: 14pt; /* Αυξημένο μέγεθος γραμματοσειράς για τα προϊόντα */
+        }
+        
+        .item-text {
+            display: table-cell;
+            width: auto;
+            white-space: nowrap;
+            font-weight: bold;
+            padding-right: 4px;
+        }
+        
+        /* Αυτό το στοιχείο γεμίζει αυτόματα τον κενό χώρο με τελείες */
+        .item-dots {
+            display: table-cell;
+            width: 100%;
+            border-bottom: 2px dotted #c4b59f; /* Πιο καθαρές και δυναμικές τελείες */
+            position: relative;
+            top: -4px;
+        }
+        
+        .item-price {
+            display: table-cell;
+            width: auto;
+            white-space: nowrap;
+            text-align: right;
+            font-weight: bold;
+            color: #8a2518;
+            padding-left: 8px;
+            font-family: 'Georgia', serif;
+            font-size: 11pt;
+        }
+        
+        .price-box {
+            display: inline-block;
+            color: #2b251f;
+            font-weight: bold;
+        }
+
+        .footer-note {
+            position: absolute;
+            bottom: 12px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 9.5pt;
+            font-style: italic;
+            color: #665e55;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PAGE 1: ΦΑΓΗΤΟ -->
+    <div class="page">
+        <div class="meander-border"></div>
+        <div class="parchment-texture"></div>
+        
+        <div class="menu-header">
+            <h1>Παραδοσιακή Ελληνική Ταβέρνα</h1>
+			<h2>στου Γαβαλά</h2>
+            <p>~ ΚΑΛΩΣ ΟΡΙΣΑΤΕ ~</p>
+        </div>
+
+        <div class="menu-layout-table">
+            <div class="menu-column">
+                
+                <!-- ΟΡΕΚΤΙΚΑ -->
+                <div class="category-block">
+                    <div class="category-title"><span class="category-icon">🏺</span>Ορεκτικά</div>
+                    
+                    <div class="menu-item"><div class="item-text">Πατάτες τηγανητές</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Φέτα παραδοσιακή</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Τυροπιτάρι χειροποίητο</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Τζατζίκι σπιτικό</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Τυροκαυτερή</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Σαγανάκι τυρί</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Κολοκυθάκια τηγανητά</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Μελιτζάνες τηγανητές</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Πιπεριές τηγανητές</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                </div>
+
+                <!-- ΣΑΛΑΤΕΣ -->
+                <div class="category-block">
+                    <div class="category-title"><span class="category-icon">🥗</span>Σαλάτες</div>
+                    
+                    <div class="menu-item"><div class="item-text">Χωριάτικη παραδοσιακή</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Αγγουροντομάτα</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Μαρούλι φρέσκο</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Λάχανο σαλάτα</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                </div>
+				
+				<!-- ΚΡΕΑΤΙΚΑ -->
+                <div class="category-block">
+                    <div class="category-title"><span class="category-icon">🥩</span>Κρεατικά</div>
+                    
+                    <div class="menu-item"><div class="item-text">Παϊδάκια αρνί (κιλό)</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Παϊδάκια προβατίνα (κιλό)</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Παϊδάκια κοτόπουλο</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Πανσέτα χοιρινή</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Μπιφτέκια μοσχαρίσια</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Μπριζόλα μοσχ. Τι-Μπον</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Μπριζόλα χοιρινή</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Καλαμάκια χοιρινό</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Καλαμάκι κοτόπουλο</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Κεμπάπ παραδοσιακό</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Κοτομπέικον</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Λουκάνικο χωριάτικο</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Ψητό αρνί στη σούβλα</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Κοντοσούβλι χοιρινό</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Κοντοσούβλι κοτόπουλο</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Κοκορέτσι παραδοσιακό</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                </div>
+				
+				<!-- ΤΣΙΠΟΥΡΑ & ΟΥΖΑ -->
+                <div class="category-block">
+                    <div class="category-title"><span class="category-icon">🍶</span>Τσίπουρο & Ούζο</div>
+                    
+                    <div class="menu-item"><div class="item-text">Ηδονικό</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Δεκαράκι μονοποικιλιακό</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Αποστολάκη</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Αποστολάκη γλυκάνισο</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Ούζο Πλωμάρι</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Τσίπουρο χύμα</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                </div>
+
+            </div>
+            
+            <div class="menu-column">
+                
+				<!-- ΚΡΑΣΙΑ -->
+                <div class="category-block">
+                    <div class="category-title"><span class="category-icon">🍷</span>Κρασιά</div>
+                    
+                    <div class="menu-item"><div class="item-text">Κόκκινο Syrah</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Λευκό ξηρό</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Μοσχάτο Τυρνάβου</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Λευκό χύμα</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Ροζέ</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                </div>
+
+                <!-- ΜΠΥΡΕΣ -->
+                <div class="category-block">
+                    <div class="category-title"><span class="category-icon">🍺</span>Μπύρες</div>
+                    
+                    <div class="menu-item"><div class="item-text">Kaiser</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Fischer</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Fix</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Άλφα</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Amstel</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Fix Άνευ</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                </div>
+				
+				<!-- ΑΝΑΨΥΚΤΙΚΑ -->
+                <div class="category-block">
+                    <div class="category-title"><span class="category-icon">🥤</span>Αναψυκτικά & Χυμοί</div>
+                    
+                    <div class="menu-item"><div class="item-text">Coca-Cola</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Coca-Cola Zero</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Sprite</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Σουρωτή</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Λεμονάδα</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Πορτοκαλάδα με ανθρ.</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Πορτοκαλάδα χωρίς ανθρ.</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Τσάι λεμόνι</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Σόδα λεμόνι</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Χυμός Τρία Φρούτα</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Χυμός Βύσσινο</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Νερό μικρό (500ml)</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Νερό μεγάλο (1lt)</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                </div>
+				
+				<!-- ΠΟΤΑ -->
+                <div class="category-block">
+                    <div class="category-title"><span class="category-icon">🥃</span>Ποτά</div>
+                    
+                    <div class="menu-item"><div class="item-text">Απλά ποτά</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Σπέσιαλ (Special)</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                </div>				
+	  
+	            <!-- ΚΑΦΕΔΕΣ -->
+                <div class="category-block">
+                    <div class="category-title"><span class="category-icon">☕</span>Καφέδες & Ροφήματα</div>
+                    
+                    <div class="menu-item"><div class="item-text">Ελληνικός μονός</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Ελληνικός διπλός</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Εσπρέσο μονό</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Εσπρέσο διπλό</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Φρέντο εσπρέσο</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Φρέντο καπουτσίνο</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Νες καφέ</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Φραπέ</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Σοκολάτα ζεστή</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Σοκολάτα κρύα</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Τσάι βουνού</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                    <div class="menu-item"><div class="item-text">Τσάι με γεύσεις</div><div class="item-dots"></div><div class="item-price"><span class="price-box">€ ____</span></div></div>
+                </div>
+				
+            </div>
+        </div>
+        
+        <div class="footer-note">Στις τιμές συμπεριλαμβάνονται όλοι οι νόμιμοι φόροι και επιβαρύνσεις.</div>
+    </div>
+
+</body>
+</html>
